@@ -5,7 +5,7 @@ Subject: [PATCH] rockchip: add pwm-fan for R4S(E)
 
 ---
  .../boot/dts/rockchip/rk3399-nanopi-r4s.dts   | 36 +++++++++++++++++++
- 1 files changed, 36 insertions(+)
+ 2 files changed, 72 insertions(+)
 
 --- a/arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dts
 +++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dts
@@ -16,7 +16,7 @@ Subject: [PATCH] rockchip: add pwm-fan for R4S(E)
 +
 +        fan: pwm-fan {
 +                compatible = "pwm-fan";
-+                cooling-levels = <0 32 64 96 128 160 192 224 240 255>;
++                cooling-levels = <0 18 102 170 255>;
 +                #cooling-cells = <2>;
 +                fan-supply = <&vdd_5v>;
 +                pwms = <&pwm1 0 50000 0>;
@@ -49,49 +49,4 @@ Subject: [PATCH] rockchip: add pwm-fan for R4S(E)
 +                        cooling-device = <&fan 2 THERMAL_NO_LIMIT>;
 +                };
 +        };
- };
- 
- &emmc_phy {
---- a/arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4se.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4se.dts
-@@ -60,6 +60,42 @@
- 		regulator-always-on;
- 		regulator-boot-on;
- 	};
-+
-+	fan: pwm-fan {
-+			compatible = "pwm-fan";
-+			cooling-levels = <0 32 64 96 128 160 192 224 240 255>;
-+			#cooling-cells = <2>;
-+			fan-supply = <&vdd_5v>;
-+			pwms = <&pwm1 0 50000 0>;
-+	};
-+};
-+
-+&cpu_thermal {
-+	trips {
-+		cpu_warm: cpu_warm {
-+			temperature = <55000>;
-+			hysteresis = <2000>;
-+			type = "active";
-+		};
-+
-+		cpu_hot: cpu_hot {
-+			temperature = <65000>;
-+			hysteresis = <2000>;
-+			type = "active";
-+		};
-+	};
-+
-+	cooling-maps {
-+		map2 {
-+			trip = <&cpu_warm>;
-+			cooling-device = <&fan THERMAL_NO_LIMIT 1>;
-+		};
-+
-+		map3 {
-+			trip = <&cpu_hot>;
-+			cooling-device = <&fan 2 THERMAL_NO_LIMIT>;
-+		};
-+	};
  };
