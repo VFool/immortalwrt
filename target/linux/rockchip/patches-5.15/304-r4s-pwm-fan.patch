@@ -96,5 +96,3 @@ Subject: [PATCH] rockchip: add pwm-fan for R4S(E)
 +		};
 +	};
  };
- 
- &pcie0 {
